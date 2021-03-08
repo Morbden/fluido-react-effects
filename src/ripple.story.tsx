@@ -26,4 +26,5 @@ clearType.args = {}
 export const allProps = Template.bind({})
 allProps.args = {
   toCenter: true,
+  disabled: false,
 }

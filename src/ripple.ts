@@ -214,8 +214,8 @@ const useRipple = (arg?: RippleProps) => {
   const [argRef, setArg] = useState<RippleProps>(null)
 
   useEffect(() => {
-    if (argRef && argRef.disabled) return
     if (!equal(arg, argRef)) setArg(arg || {})
+    if (argRef && argRef.disabled) return
     const anchor = anchorRef.current as HTMLElement
     if (!anchor) return
     if (!boxRef.current) {
