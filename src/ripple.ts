@@ -1,28 +1,28 @@
 import equal from 'deep-equal'
-import React, { Component, useEffect, useRef } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import styled from 'styled-components'
 import { uid } from 'uid'
 
 type RippleComponentType = string | React.Component | React.FunctionComponent
-type RippleBoxType = {
+
+interface RippleBoxType extends HTMLDivElement {
   __pos?: { x: number; y: number }
   __ripple?: HTMLElement
   __timerId?: any
   __rippleSize?: number
   __swingGrow?: boolean
-} & HTMLDivElement
-
-interface RippleProps {
-  ripple?: RippleComponentType
-  toCenter?: boolean
-  smallSize?: boolean
-  isSSR?: boolean
 }
 
-type ProcessOptionType = (
-  arg?: RippleComponentType | RippleProps,
-) => RippleProps
+export interface RippleProps {
+  ripple?: RippleComponentType
+  toCenter?: boolean
+  disabled?: boolean
+}
+
+interface ProcessOptionType {
+  (arg?: RippleComponentType | RippleProps): RippleProps
+}
 
 type EaseTransitionType =
   | 'ease-in-out'
@@ -89,7 +89,6 @@ const processOptions: ProcessOptionType = (arg) => {
   const opt: RippleProps = {
     ripple: DefaultRipple,
     toCenter: false,
-    smallSize: false,
   }
   if (['string', 'function'].includes(typeof arg) || arg instanceof Component) {
     opt.ripple = arg as RippleComponentType
@@ -129,10 +128,6 @@ const startRipple = (
   const cx = x - left
   const cy = y - top
   let rippleSize = Math.min(height, width, 100)
-
-  if (opt.smallSize) {
-    rippleSize /= 2.5
-  }
 
   const positionLeft = x ? cx : width / 2
   const positionTop = y ? cy : height / 2
@@ -216,11 +211,11 @@ const releaseRipple = (box: RippleBoxType) => {
 const useRipple = (arg?: RippleProps) => {
   const anchorRef = useRef(null)
   const boxRef = useRef<RippleBoxType>(null)
-  const argRef = useRef<RippleProps>(null)
+  const [argRef, setArg] = useState<RippleProps>(null)
 
   useEffect(() => {
-    if (arg.isSSR) return
-    argRef.current = arg
+    if (argRef && argRef.disabled) return
+    if (!equal(arg, argRef)) setArg(arg || {})
     const anchor = anchorRef.current as HTMLElement
     if (!anchor) return
     if (!boxRef.current) {
@@ -229,7 +224,7 @@ const useRipple = (arg?: RippleProps) => {
     anchor.style.position = 'relative'
     anchor.appendChild(boxRef.current)
 
-    const opt: RippleProps = processOptions(arg)
+    const opt: RippleProps = processOptions(argRef)
     appendRipple(opt.ripple, boxRef.current)
 
     const onRipple = (ev: MouseEvent) => {
@@ -271,7 +266,7 @@ const useRipple = (arg?: RippleProps) => {
       anchor.removeEventListener('blur', onReleaseRipple)
       window.removeEventListener('mouseup', onReleaseRipple, true)
     }
-  }, [arg.isSSR, anchorRef, equal(arg, argRef.current)])
+  }, [arg && arg.disabled, anchorRef, equal(arg, argRef)])
 
   return {
     anchor: anchorRef,
