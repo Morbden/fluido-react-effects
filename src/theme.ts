@@ -6,14 +6,14 @@ type ThemeProps = 'light' | 'dark' | null
 
 const ThemeState = createState<ThemeProps>(null)
 
-const useTheme = (isSSR: boolean = false) => {
+const useTheme = (disabledLocalStorage: boolean = false) => {
   const state = useState<ThemeProps>(ThemeState)
-  if (!isSSR) {
+  if (!disabledLocalStorage) {
     state.attach(Persistence('fl-style-theme-selected'))
   }
 
   useEffect(() => {
-    if (!isSSR) {
+    if (!disabledLocalStorage) {
       const html = document.documentElement
       switch (state.value) {
         case 'light':
@@ -29,7 +29,7 @@ const useTheme = (isSSR: boolean = false) => {
           html.removeAttribute('light-theme')
       }
     }
-  }, [isSSR, state.value])
+  }, [disabledLocalStorage, state.value])
 
   return state
 }
