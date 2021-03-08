@@ -1,12 +1,19 @@
-import { createState, useState } from '@hookstate/core'
-import { useViewportScroll } from 'framer-motion'
-import { useEffect, useRef } from 'react'
+import { createState, State, useState } from '@hookstate/core'
+import { useElementScroll, useViewportScroll } from 'framer-motion'
+import { MutableRefObject, useEffect, useRef } from 'react'
 
-interface ScrollDetectorProps {
+export interface ScrollDetectorProps {
   toUp: boolean
   toDown: boolean
   toLeft: boolean
   toRight: boolean
+}
+
+interface UseScrollDetectorType {
+  (isElement?: boolean): [
+    State<ScrollDetectorProps>,
+    MutableRefObject<HTMLElement>,
+  ]
 }
 
 const ScrollDetectorState = createState<ScrollDetectorProps>({
@@ -16,8 +23,9 @@ const ScrollDetectorState = createState<ScrollDetectorProps>({
   toRight: false,
 })
 
-const useScrollDetector = () => {
-  const scroll = useViewportScroll()
+const useScrollDetector: UseScrollDetectorType = (isElement) => {
+  const ref = useRef<HTMLElement>()
+  const scroll = isElement ? useElementScroll(ref) : useViewportScroll()
   const posRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const useScrollDetector = () => {
     }
   }, [scroll])
 
-  return useState<ScrollDetectorProps>(ScrollDetectorState)
+  return [useState<ScrollDetectorProps>(ScrollDetectorState), ref]
 }
 
 export default useScrollDetector
