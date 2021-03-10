@@ -1,6 +1,6 @@
 {
   "name": "@fluido/react-effects",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Fluido webapp effects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "@hookstate/core": "^3.0.6",
     "@hookstate/persistence": "^3.0.0",
     "deep-equal": "^2.0.5",
-    "framer-motion": "^3.9.1",
+    "framer-motion": "^3.10.2",
     "uid": "^2.0.0"
   },
   "peerDependencies": {
@@ -41,13 +41,13 @@
     "@storybook/addon-links": "^6.1.21",
     "@storybook/react": "^6.1.21",
     "@types/classnames": "^2.2.11",
-    "@types/node": "^14.14.31",
-    "@types/react": "^17.0.2",
+    "@types/node": "^14.14.33",
+    "@types/react": "^17.0.3",
     "@types/styled-components": "^5.1.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "sass": "^1.32.8",
     "styled-components": "^5.2.1",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }
