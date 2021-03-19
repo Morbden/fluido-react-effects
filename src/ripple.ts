@@ -33,8 +33,9 @@ type EaseTransitionType =
 
 const transitionEase = (
   ease: EaseTransitionType = 'ease-in-out',
-  timeMilliseconds: number = 300,
-) => `all ${timeMilliseconds}ms ${ease}`
+  timeMilliseconds: number = 250,
+) =>
+  `transform ${timeMilliseconds}ms ${ease}, opacity ${timeMilliseconds}ms 200ms ${ease} `
 
 const DefaultRipple = styled.div`
   position: absolute;

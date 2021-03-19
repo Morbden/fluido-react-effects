@@ -9,15 +9,15 @@ const ComponentMeta: Meta = {
 export default ComponentMeta
 
 const Container = styled.div`
-  width: 20rem;
-  height: 20rem;
+  width: 10rem;
+  height: 10rem;
   background-color: rebeccapurple;
 `
 
 const Template: Story<RippleProps> = (args) => {
   const { anchor } = useRipple(args)
 
-  return <Container ref={anchor}></Container>
+  return <Container tabIndex={0} ref={anchor}></Container>
 }
 
 export const clearType = Template.bind({})
