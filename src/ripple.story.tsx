@@ -9,8 +9,8 @@ const ComponentMeta: Meta = {
 export default ComponentMeta
 
 const Container = styled.div`
+  height: 4rem;
   width: 10rem;
-  height: 10rem;
   background-color: rebeccapurple;
 `
 

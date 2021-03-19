@@ -128,7 +128,7 @@ const startRipple = (
 
   const cx = x - left
   const cy = y - top
-  let rippleSize = Math.min(height, width, 100)
+  let rippleSize = Math.max(height, width)
 
   const positionLeft = x ? cx : width / 2
   const positionTop = y ? cy : height / 2
